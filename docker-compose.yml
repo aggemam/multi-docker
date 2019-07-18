@@ -6,7 +6,7 @@ services:
       context: ./nginx
       dockerfile: Dockerfile.dev
     ports:
-      - "3050:80"
+      - "8080:80"
 
   postgres:
     image: "postgres:alpine"
