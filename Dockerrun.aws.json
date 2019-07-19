@@ -14,18 +14,7 @@
     {
       "name": "server",
       "image": "nametab/multi-server",
-      "hostname": "api",
-      "links": ["postgres", "redis"]
-    },
-    {
-      "name": "redis",
-      "image": "redis:alpine",
-      "hostname": "redis"
-    },
-    {
-      "name": "postgres",
-      "image": "pg:alpine",
-      "hostname": "postgres"
+      "hostname": "api"
     },
     {
       "name": "nginx",
