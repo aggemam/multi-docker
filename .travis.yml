@@ -8,7 +8,18 @@ before_install:
 
 script:
   - docker run -e CI=true mytag npm run test
-# deploy:
+
+after_success:
+  - docker build -t nametab/multi-client ./client
+  - docker build -t nametab/multi-nginx ./nginx
+  - docker build -t nametab/multi-server ./server
+  - docker build -t nametab/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push nametab/multi-client
+  - docker push nametab/multi-nginx
+  - docker push nametab/multi-server
+  - docker push nametab/multi-worker
+  # deploy:
 #   provider: elasticbeanstalk
 #   region: "eu-west-1"
 #   app: "docker"
