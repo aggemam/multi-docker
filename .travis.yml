@@ -4,7 +4,7 @@ services:
   - docker
 
 before_install:
-  - docker build -f ./client/Dockerfile.dev -t mytag .
+  - docker build -f ./client/Dockerfile.dev -t mytag ./client
 
 script:
   - docker run -e CI=true mytag npm run test
