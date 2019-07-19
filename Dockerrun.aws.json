@@ -1,0 +1,44 @@
+{
+  "AWSEBDockerRunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "client",
+      "image": "nametab/multi-client",
+      "hostname": "client"
+    },
+    {
+      "name": "worker",
+      "image": "nametab/multi-worker",
+      "hostname": "worker"
+    },
+    {
+      "name": "server",
+      "image": "nametab/multi-server",
+      "hostname": "api",
+      "links": ["postgres", "redis"]
+    },
+    {
+      "name": "redis",
+      "image": "redis:alpine",
+      "hostname": "redis"
+    },
+    {
+      "name": "postgres",
+      "image": "pg:alpine",
+      "hostname": "postgres"
+    },
+    {
+      "name": "nginx",
+      "image": "nametab/multi-nginx",
+      "hostname": "nginx",
+      "essential": true,
+      "portMapping": [
+        {
+          "hostPost": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": ["client", "server"]
+    }
+  ]
+}
