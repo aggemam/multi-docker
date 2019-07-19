@@ -1,5 +1,10 @@
 const keys = require('./keys');
 
+// Util
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Express App Setup
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -41,7 +46,7 @@ app.get('/', (req, res) => {
 
 app.get('/values/all', async (req, res) => {
   const values = await pgClient.query('SELECT * from values');
-
+  await sleep(1000);
   res.send(values.rows);
 });
 
