@@ -3,63 +3,57 @@ import axios from 'axios';
 
 class Fib extends Component {
   state = {
-    seenIndexes: null,
-    values: null,
+    seenIndexes: [],
+    values: {},
     index: ''
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.fetchValues();
     this.fetchIndexes();
   }
 
-  componentWillUnmount() {
-    if (this.asyncFetchValues) {
-      this.asyncFetchValues.cancel();
-    }
-    if (this.asyncfetchIndexes) {
-      this.asyncfetchIndexes.cancel();
-    }
-  }
   fetchValues() {
-    this.asyncFetchValues = axios.get('/api/values/current')
-      .then(values => {
+    axios.get('/api/values/current')
+      .then((values) => {
         this.setState({ values: values.data });
-        this.asyncFetchValues = null;
+      })
+      .catch((err) => {
+        console.log(err);
       });
+
   }
 
   fetchIndexes() {
-    this.asyncfetchIndexes = axios.get('/api/values/all')
-      .then(seenIndexes => this.setState({ seenIndexes: seenIndexes.data }));
+    axios.get('/api/values/all').then((seenIndexes) =>
+      this.setState({
+        seenIndexes: seenIndexes.data
+      }))
+      .catch((err) => {
+        console.log(err);
+      });
   }
-
 
   handleSubmit = event => {
     event.preventDefault();
 
     axios.post('/api/values', {
       index: this.state.index
-    }).then(() => {
-      this.setState({ index: '' })
-      this.fetchValues();
-      this.fetchIndexes();
-    });
+    })
+      .then(() => this.setState({ index: '' }))
+      .catch((err) => {
+        console.log(err);
+      });
+
+
   };
 
-  renderSeenIndexes = () => {
-    return this.state.seenIndexes && <div>
-      <h3>Indexes I have seen:</h3>
-      {this.state.seenIndexes.map(({ number }) => number).join(', ')}
-    </div>
+  renderSeenIndexes() {
+    return this.state.seenIndexes.map(({ number }) => number).join(', ');
   }
 
-  renderValues = () => {
-    if (!this.state.values) {
-      return null;
-    }
+  renderValues() {
     const entries = [];
-
 
     for (let key in this.state.values) {
       entries.push(
@@ -69,10 +63,7 @@ class Fib extends Component {
       );
     }
 
-    return <div>
-      <h3>Calculated Values:</h3>
-      {entries}
-    </div>
+    return entries;
   }
 
   render() {
@@ -87,7 +78,10 @@ class Fib extends Component {
           <button>Submit</button>
         </form>
 
+        <h3>Indexes I have seen:</h3>
         {this.renderSeenIndexes()}
+
+        <h3>Calculated Values:</h3>
         {this.renderValues()}
       </div>
     );
