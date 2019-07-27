@@ -18,7 +18,7 @@ before_install:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t nametab/react-test -f client/Dockerfile.dev client
 
-  script:
+script:
   - docker run -e CI=true nametab/react-test npm run test
 
 deploy:
